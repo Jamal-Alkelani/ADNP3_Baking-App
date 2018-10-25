@@ -16,39 +16,40 @@ import com.example.gamal.adnp3_bakingapp.R;
  * Implementation of App Widget functionality.
  */
 public class BakingAppWidget extends AppWidgetProvider {
-    public static int recipeId =-1;
+    public static int recipeId = -1;
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId,int recipeID) {
+                                int appWidgetId, int recipeID) {
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
 
-        Intent mainScreen=new Intent(context,MainActivity.class);
-        PendingIntent mainPendingIntent=PendingIntent.getActivity(context,0,mainScreen,PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent mainScreen = new Intent(context, MainActivity.class);
+        PendingIntent mainPendingIntent = PendingIntent.getActivity(context, 0, mainScreen, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        views.setOnClickPendingIntent(R.id.tv_no_recipe_selected_error,mainPendingIntent);
+        views.setOnClickPendingIntent(R.id.tv_no_recipe_selected_error, mainPendingIntent);
 
-        if(recipeID==-1){
-            views.setViewVisibility(R.id.recipe_widget_ingredients,View.GONE);
-            views.setViewVisibility(R.id.tv_no_recipe_selected_error,View.VISIBLE);
-        }else{
-            views.setViewVisibility(R.id.recipe_widget_ingredients,View.VISIBLE);
-            views.setViewVisibility(R.id.tv_no_recipe_selected_error,View.GONE);
+        if (recipeID == -1) {
+            views.setViewVisibility(R.id.recipe_widget_ingredients, View.GONE);
+            views.setViewVisibility(R.id.tv_no_recipe_selected_error, View.VISIBLE);
+        } else {
+            views.setViewVisibility(R.id.recipe_widget_ingredients, View.VISIBLE);
+            views.setViewVisibility(R.id.tv_no_recipe_selected_error, View.GONE);
 
-            Intent intent=new Intent(context.getApplicationContext(),BakingAppWidgetService.class);
+            Intent intent = new Intent(context.getApplicationContext(), BakingAppWidgetService.class);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            intent.putExtra("random",Math.random());
+            intent.putExtra("random", Math.random());
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-            intent.putExtra("RECIPE ID",recipeID);
+            intent.putExtra("RECIPE ID", recipeID);
 
-            views.setRemoteAdapter(R.id.recipe_widget_ingredients,intent);
+            views.setRemoteAdapter(R.id.recipe_widget_ingredients, intent);
         }
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-    public static void updateListItems(Context context,AppWidgetManager appWidgetManager,int []appWidgetIds){
+    public static void updateListItems(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId, recipeId);
         }

@@ -4,21 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="2dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="2dp">
 
     <FrameLayout
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp">
 
         <ImageView
             android:id="@+id/recipe_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
-            tools:src="@drawable/c4" />
+            tools:src="@drawable/nutella_pie" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -34,14 +34,14 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
         android:layout_marginBottom="4dp"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:divider="@android:color/transparent"
         android:dividerHeight="0.0px"
         android:elevation="8dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         app:cardElevation="10dp"
         app:cardPreventCornerOverlap="false">
 
@@ -53,19 +53,18 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/recipe_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
                     android:layout_alignParentLeft="true"
-                    android:fontFamily="@font/gabriola"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginTop="4dp"
-                    android:textColor="@color/black"
+                    android:fontFamily="@font/gabriola"
                     android:letterSpacing="0.05"
+                    android:textColor="@color/black"
                     android:textSize="28sp"
                     tools:text="Burger" />
 
@@ -74,8 +73,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="8dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginRight="8dp"
                     android:textColor="@color/gray"
                     android:textSize="14sp"
                     tools:text="30 Min" />

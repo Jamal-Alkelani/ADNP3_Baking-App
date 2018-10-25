@@ -24,37 +24,38 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 public class BakingVideo_Description extends AppCompatActivity {
-    public final static String DESCRIPTION="DESC";
-    public final static String VIDEO_URL="URL";
+    public final static String DESCRIPTION = "DESC";
+    public final static String VIDEO_URL = "URL";
     private SimpleExoPlayerView exoPlayerView;
     private SimpleExoPlayer mExoPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baking_video__description);
-        Intent intent=getIntent();
-        if(intent==null){
+        Intent intent = getIntent();
+        if (intent == null) {
             Toast.makeText(this, "An error occured in Video_Desc Activity (Intent is null)", Toast.LENGTH_SHORT).show();
             return;
         }
-        exoPlayerView=findViewById(R.id.exo_player);
-        String description=intent.getStringExtra(DESCRIPTION);
-        String video_url=intent.getStringExtra(VIDEO_URL);
+        exoPlayerView = findViewById(R.id.exo_player);
+        String description = intent.getStringExtra(DESCRIPTION);
+        String video_url = intent.getStringExtra(VIDEO_URL);
         Bitmap icon = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.ic_action_google_play);
         exoPlayerView.setDefaultArtwork(icon);
-        RecipeDescriptionFragment recipeDescriptionFragment=new RecipeDescriptionFragment();
+        RecipeDescriptionFragment recipeDescriptionFragment = new RecipeDescriptionFragment();
         recipeDescriptionFragment.setDescription(description);
-        FragmentManager fragmentManager=getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .add(R.id.description,recipeDescriptionFragment)
+                .add(R.id.description, recipeDescriptionFragment)
                 .commit();
 
         long position;
-        if(savedInstanceState!=null)
-            position=savedInstanceState.getLong("video-position",0);
+        if (savedInstanceState != null)
+            position = savedInstanceState.getLong("video-position", 0);
         else
-            position=0;
+            position = 0;
         initializePlayer(video_url, position);
 
 
@@ -87,6 +88,7 @@ public class BakingVideo_Description extends AppCompatActivity {
         }
 
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -103,10 +105,10 @@ public class BakingVideo_Description extends AppCompatActivity {
 
     private void releasePlayer() {
 
-        if(mExoPlayer!=null){
+        if (mExoPlayer != null) {
             mExoPlayer.stop();
             mExoPlayer.release();
-            mExoPlayer=null;
+            mExoPlayer = null;
         }
 
     }

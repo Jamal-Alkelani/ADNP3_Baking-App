@@ -26,33 +26,32 @@ public class rv_RecipeAdapter extends RecyclerView.Adapter<rv_RecipeAdapter.View
 
     private final OnItemClickListener onItemClickListener;
 
-    public rv_RecipeAdapter(Context context, List<Recipe> recipes,OnItemClickListener listener) {
+    public rv_RecipeAdapter(Context context, List<Recipe> recipes, OnItemClickListener listener) {
         this.recipes = recipes;
-        this.context=context;
-        this.onItemClickListener=listener;
+        this.context = context;
+        this.onItemClickListener = listener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view=LayoutInflater.from(context).inflate(R.layout.rc_recipe_card_item,viewGroup,false);
-        ViewHolder viewHolder=new ViewHolder(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.rc_recipe_card_item, viewGroup, false);
+        ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
 
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
-        if(i%2==0)
+        if (i % 2 == 0)
             holder.recipeImage.getLayoutParams().height = 820;
         else
             holder.recipeImage.getLayoutParams().height = 700;
         holder.recipeName.setText(recipes.get(i).getName());
-        holder.recipeDuration.setText((int)(Math.random()*45)+" Min");
-        holder.recipeRating.setRating((float) Math.random()*5);
-        if(recipes.get(i).getImage()==0){
-            switch (recipes.get(i).getName()){
+        holder.recipeDuration.setText((int) (Math.random() * 45) + " Min");
+        holder.recipeRating.setRating((float) Math.random() * 5);
+        if (recipes.get(i).getImage() == 0) {
+            switch (recipes.get(i).getName()) {
                 case "Brownies":
                     holder.recipeImage.setImageResource(R.drawable.brownies);
                     break;
@@ -71,7 +70,7 @@ public class rv_RecipeAdapter extends RecyclerView.Adapter<rv_RecipeAdapter.View
 
 
             }
-        }else{
+        } else {
             holder.recipeImage.setImageResource(recipes.get(i).getImage());
 
         }
@@ -79,7 +78,7 @@ public class rv_RecipeAdapter extends RecyclerView.Adapter<rv_RecipeAdapter.View
 
     @Override
     public int getItemCount() {
-        if(recipes==null)
+        if (recipes == null)
             return 0;
         return recipes.size();
     }
@@ -92,10 +91,10 @@ public class rv_RecipeAdapter extends RecyclerView.Adapter<rv_RecipeAdapter.View
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            recipeName=itemView.findViewById(R.id.recipe_name);
-            recipeDuration=itemView.findViewById(R.id.recipe_duration);
-            recipeImage=itemView.findViewById(R.id.recipe_image);
-            recipeRating=itemView.findViewById(R.id.recipe_rating);
+            recipeName = itemView.findViewById(R.id.recipe_name);
+            recipeDuration = itemView.findViewById(R.id.recipe_duration);
+            recipeImage = itemView.findViewById(R.id.recipe_image);
+            recipeRating = itemView.findViewById(R.id.recipe_rating);
             itemView.setOnClickListener(this);
         }
 

@@ -13,27 +13,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientsListWidgetProvider implements RemoteViewsService.RemoteViewsFactory {
-    List<String> mIngredientsList=null;
+    List<String> mIngredientsList = null;
     List<Ingredients> ingredients;
-    private Context mContext=null;
+    private Context mContext = null;
     private int Id;
-    public  IngredientsListWidgetProvider(Context context, Intent intent){
-        mContext=context;
-        if(intent.hasExtra("RECIPE ID")){
-            Id=intent.getIntExtra("RECIPE ID",-1);
+
+    public IngredientsListWidgetProvider(Context context, Intent intent) {
+        mContext = context;
+        if (intent.hasExtra("RECIPE ID")) {
+            Id = intent.getIntExtra("RECIPE ID", -1);
         }
     }
+
     @Override
     public void onCreate() {
-        mIngredientsList=new ArrayList<>();
-        ingredients=new JSONHandler().getIngredients(Id,mContext);
+        mIngredientsList = new ArrayList<>();
+        ingredients = new JSONHandler().getIngredients(Id, mContext);
         updateIngredientsList();
     }
 
     private void updateIngredientsList() {
-        String [] values=new String[ingredients.size()];
-        for (int i=0;i<ingredients.size();i++){
-            values[i]="*"+ingredients.get(i).getQuantity()+" "+ingredients.get(i).getMeasure()+" "+ingredients.get(i).getIngredient();
+        String[] values = new String[ingredients.size()];
+        for (int i = 0; i < ingredients.size(); i++) {
+            values[i] = "*" + ingredients.get(i).getQuantity() + " " + ingredients.get(i).getMeasure() + " " + ingredients.get(i).getIngredient();
             mIngredientsList.add(values[i]);
         }
 
@@ -51,8 +53,8 @@ public class IngredientsListWidgetProvider implements RemoteViewsService.RemoteV
 
     @Override
     public int getCount() {
-        if (mIngredientsList==null)
-        return 0;
+        if (mIngredientsList == null)
+            return 0;
 
         return mIngredientsList.size();
     }
@@ -60,8 +62,8 @@ public class IngredientsListWidgetProvider implements RemoteViewsService.RemoteV
     //similar to getView in the adapter, but in thi case we return the RemoteView
     @Override
     public RemoteViews getViewAt(int i) {
-        RemoteViews remoteViews=new RemoteViews(mContext.getPackageName(), R.layout.widget_item);
-        remoteViews.setTextViewText(R.id.single_text_view,mIngredientsList.get(i));
+        RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.widget_item);
+        remoteViews.setTextViewText(R.id.single_text_view, mIngredientsList.get(i));
 
         return remoteViews;
     }

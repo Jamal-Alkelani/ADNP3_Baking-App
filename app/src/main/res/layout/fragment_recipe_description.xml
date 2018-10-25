@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView android:id="@+id/tv_recipe_description"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv_recipe_description"
     android:layout_width="match_parent"
-    android:textSize="18sp"
-    tools:text="This text is just for testing"
+    android:layout_height="match_parent"
     android:layout_margin="4dp"
     android:fontFamily="sans-serif-condensed"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:textSize="18sp"
+    tools:text="This text is just for testing">
 
 </TextView>

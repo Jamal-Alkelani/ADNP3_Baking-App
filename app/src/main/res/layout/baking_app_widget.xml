@@ -4,20 +4,20 @@
     android:background="#09C"
     android:padding="@dimen/widget_margin">
 
-<ListView
-    android:id="@+id/recipe_widget_ingredients"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <ListView
+        android:id="@+id/recipe_widget_ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</ListView>
+    </ListView>
 
     <TextView
         android:id="@+id/tv_no_recipe_selected_error"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Oops No Recipe is selected !"
-        android:textSize="48sp"
         android:gravity="center"
-        android:visibility="gone"/>
+        android:text="@string/oops_no_recipe_is_selected"
+        android:textSize="48sp"
+        android:visibility="gone" />
 
 </RelativeLayout>
