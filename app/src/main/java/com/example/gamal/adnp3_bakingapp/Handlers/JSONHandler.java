@@ -2,7 +2,16 @@ package com.example.gamal.adnp3_bakingapp.Handlers;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.gamal.adnp3_bakingapp.Adapters.rv_RecipeAdapter;
+import com.example.gamal.adnp3_bakingapp.MainActivity;
 import com.example.gamal.adnp3_bakingapp.Models.Ingredients;
 import com.example.gamal.adnp3_bakingapp.Models.Recipe;
 import com.example.gamal.adnp3_bakingapp.Models.Steps;
@@ -20,22 +29,6 @@ import java.util.List;
 public class JSONHandler {
     private final static String TAG = JSONHandler.class.getName();
 
-    public static String loadJSONFromAsset(Context context) {
-        String json = null;
-        try {
-            InputStream is = context.getAssets().open("RecipeDataJSON");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-
-    }
 
     public static List<Recipe> getRecipes(String jsonData) {
         if (jsonData == null) {
@@ -67,8 +60,8 @@ public class JSONHandler {
         Log.e(TAG,"An Error Occured While Handling Json Data in Json Handler (Data=null)");
     }
 
-    public static List<Ingredients> getIngredients(int Id, Context context) {
-        String jsonData = loadJSONFromAsset(context);
+    public static List<Ingredients> getIngredients(int Id, String response) {
+        String jsonData=response;
         if (jsonData == null) {
             LogErrorMessage();
         } else {
@@ -98,8 +91,8 @@ public class JSONHandler {
         return null;
     }
 
-    public static List<Steps> getSteps(int Id, Context context) {
-        String jsonData = loadJSONFromAsset(context);
+    public static List<Steps> getSteps(int Id, String response) {
+        String jsonData = response;
         if (jsonData == null) {
             LogErrorMessage();
         } else {
@@ -129,5 +122,6 @@ public class JSONHandler {
         }
         return null;
     }
+
 
 }

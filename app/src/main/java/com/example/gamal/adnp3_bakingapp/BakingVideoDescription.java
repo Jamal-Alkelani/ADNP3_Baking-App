@@ -132,6 +132,7 @@ public class BakingVideoDescription extends AppCompatActivity {
         super.onPause();
         if(mExoPlayer!=null){
             mExoPlayer.setPlayWhenReady(false);
+            releasePlayer();
         }
     }
 
@@ -139,8 +140,7 @@ public class BakingVideoDescription extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         if(mExoPlayer!=null){
-            mExoPlayer.setPlayWhenReady(false);
-            mExoPlayer.stop();
+            releasePlayer();
         }
     }
 
@@ -152,6 +152,12 @@ public class BakingVideoDescription extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mExoPlayer!=null)
+        mExoPlayer.setPlayWhenReady(true);
+    }
 
     @Override
     protected void onDestroy() {

@@ -2,9 +2,18 @@ package com.example.gamal.adnp3_bakingapp.BakingAppWidgets;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.gamal.adnp3_bakingapp.Adapters.rv_RecipeAdapter;
 import com.example.gamal.adnp3_bakingapp.Handlers.JSONHandler;
 import com.example.gamal.adnp3_bakingapp.Models.Ingredients;
 import com.example.gamal.adnp3_bakingapp.R;
@@ -12,23 +21,24 @@ import com.example.gamal.adnp3_bakingapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.gamal.adnp3_bakingapp.MainActivity.RECIPES_URL;
+
 public class IngredientsListWidgetProvider implements RemoteViewsService.RemoteViewsFactory {
     List<String> mIngredientsList = null;
-    List<Ingredients> ingredients;
+    ArrayList<Ingredients> ingredients;
     private Context mContext = null;
     private int Id;
-
+    Intent intent;
     public IngredientsListWidgetProvider(Context context, Intent intent) {
         mContext = context;
-        if (intent.hasExtra("RECIPE ID")) {
-            Id = intent.getIntExtra("RECIPE ID", -1);
-        }
+        this.intent=intent;
+
     }
 
     @Override
     public void onCreate() {
         mIngredientsList = new ArrayList<>();
-        ingredients = new JSONHandler().getIngredients(Id, mContext);
+        ingredients=intent.getParcelableArrayListExtra("ingred");
         updateIngredientsList();
     }
 
@@ -43,6 +53,8 @@ public class IngredientsListWidgetProvider implements RemoteViewsService.RemoteV
 
     @Override
     public void onDataSetChanged() {
+        Log.e("cc","datac chaned");
+        if(ingredients!=null)
         updateIngredientsList();
     }
 

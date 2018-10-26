@@ -2,6 +2,7 @@ package com.example.gamal.adnp3_bakingapp;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.gamal.adnp3_bakingapp.Adapters.rv_RecipeAdapter;
 import com.example.gamal.adnp3_bakingapp.BakingAppWidgets.BakingAppWidget;
 import com.example.gamal.adnp3_bakingapp.Fragments.RecipeDescriptionFragment;
 import com.example.gamal.adnp3_bakingapp.Fragments.RecipeIngredientsFragment;
@@ -33,6 +41,8 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import java.util.List;
+
+import static com.example.gamal.adnp3_bakingapp.MainActivity.RECIPES_URL;
 
 public class BakingStepsIngredients extends AppCompatActivity implements RecipeStepsFragment.onItemClickListener {
     private final String TAG = getClass().getSimpleName();
@@ -89,42 +99,66 @@ public class BakingStepsIngredients extends AppCompatActivity implements RecipeS
     }
 
     private void handleTablet() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, RECIPES_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                RecipeIngredientsFragment ingredientsFragment = new RecipeIngredientsFragment();
+                RecipeStepsFragment recipeStepsFragment = new RecipeStepsFragment();
+                recipeDescriptionFragment = new RecipeDescriptionFragment();
+                recipeStepsFragment.setTablet(true);
+                JSONHandler jsonHandler = new JSONHandler();
+                List<Ingredients> ingredients = jsonHandler.getIngredients(Id, response);
+                steps = jsonHandler.getSteps(Id, response);
+                ingredientsFragment.setIngredients(ingredients);
+                recipeStepsFragment.setSteps(steps);
 
+                initializePlayer(steps.get(0).getVidepURL(), position);
+                recipeDescriptionFragment.setDescription(steps.get(0).getDescription());
 
-        RecipeIngredientsFragment ingredientsFragment = new RecipeIngredientsFragment();
-        RecipeStepsFragment recipeStepsFragment = new RecipeStepsFragment();
-        recipeDescriptionFragment = new RecipeDescriptionFragment();
-        recipeStepsFragment.setTablet(true);
-        JSONHandler jsonHandler = new JSONHandler();
-        List<Ingredients> ingredients = jsonHandler.getIngredients(Id, this);
-        steps = jsonHandler.getSteps(Id, this);
-        ingredientsFragment.setIngredients(ingredients);
-        recipeStepsFragment.setSteps(steps);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .add(R.id.ingredients, ingredientsFragment)
+                        .add(R.id.steps, recipeStepsFragment)
+                        .add(R.id.description, recipeDescriptionFragment)
+                        .commit();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
-        initializePlayer(steps.get(0).getVidepURL(), position);
-        recipeDescriptionFragment.setDescription(steps.get(0).getDescription());
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.ingredients, ingredientsFragment)
-                .add(R.id.steps, recipeStepsFragment)
-                .add(R.id.description, recipeDescriptionFragment)
-                .commit();
+            }
+        });
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(stringRequest);
     }
 
     private void handlePhone() {
-        JSONHandler jsonHandler = new JSONHandler();
-        List<Ingredients> ingredients = jsonHandler.getIngredients(Id, this);
-        List<Steps> steps = jsonHandler.getSteps(Id, this);
-        RecipeIngredientsFragment ingredientsFragment = new RecipeIngredientsFragment();
-        RecipeStepsFragment recipeStepsFragment = new RecipeStepsFragment();
-        ingredientsFragment.setIngredients(ingredients);
-        recipeStepsFragment.setSteps(steps);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.ingredients, ingredientsFragment)
-                .add(R.id.steps, recipeStepsFragment)
-                .commit();
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, RECIPES_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                JSONHandler jsonHandler = new JSONHandler();
+                List<Ingredients> ingredients = jsonHandler.getIngredients(Id, response);
+                List<Steps> steps = jsonHandler.getSteps(Id, response);
+                RecipeIngredientsFragment ingredientsFragment = new RecipeIngredientsFragment();
+                RecipeStepsFragment recipeStepsFragment = new RecipeStepsFragment();
+                ingredientsFragment.setIngredients(ingredients);
+                recipeStepsFragment.setSteps(steps);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .add(R.id.ingredients, ingredientsFragment)
+                        .add(R.id.steps, recipeStepsFragment)
+                        .commit();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(stringRequest);
     }
 
     @Override
@@ -239,4 +273,6 @@ public class BakingStepsIngredients extends AppCompatActivity implements RecipeS
         super.onDestroy();
         releasePlayer();
     }
+
+
 }
