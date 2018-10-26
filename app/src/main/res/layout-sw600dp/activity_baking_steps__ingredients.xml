@@ -17,6 +17,13 @@
             android:id="@+id/exo_player"
             android:layout_width="match_parent"
             android:layout_height="350dp"/>
+        <ImageView
+            android:id="@+id/video_not_available"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/video_not_availabe"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="match_parent"

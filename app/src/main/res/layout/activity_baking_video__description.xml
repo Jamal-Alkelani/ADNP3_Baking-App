@@ -4,12 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".BakingVideo_Description">
+    tools:context=".BakingVideoDescription">
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/exo_player"
         android:layout_width="match_parent"
         android:layout_height="250dp" />
+
+    <ImageView
+        android:id="@+id/video_not_available"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/video_not_availabe"
+        android:visibility="gone"/>
 
     <FrameLayout
         android:id="@+id/description"

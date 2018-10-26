@@ -64,7 +64,7 @@ public class JSONHandler {
     }
 
     public static void LogErrorMessage() {
-        Log.e(TAG, "An Error Occured While Handling Json Data in Json Handler (Data=null)");
+        Log.e(TAG,"An Error Occured While Handling Json Data in Json Handler (Data=null)");
     }
 
     public static List<Ingredients> getIngredients(int Id, Context context) {

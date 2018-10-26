@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements rv_RecipeAdapter.
 
     @Override
     public void onItemClick(int Id) {
-        Intent intent = new Intent(this, BakingSteps_Ingredients.class);
-        intent.putExtra(BakingSteps_Ingredients.ID, Id);
+        Intent intent = new Intent(this, BakingStepsIngredients.class);
+        intent.putExtra(BakingStepsIngredients.ID, Id);
         startActivity(intent);
     }
 

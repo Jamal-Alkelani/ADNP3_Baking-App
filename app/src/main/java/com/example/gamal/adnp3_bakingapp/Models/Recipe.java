@@ -6,13 +6,16 @@ public class Recipe {
     private String duration;
     private float rating;
     private int image;
-    public Recipe(int Id,String name, int image, int rating, String duration) {
+
+
+    public Recipe(int Id, String name, int image, int rating, String duration) {
         this.Id=Id;
         this.name = name;
         this.image = image;
         this.rating = rating;
         this.duration = duration;
     }
+
 
     public String getName() {
         return name;

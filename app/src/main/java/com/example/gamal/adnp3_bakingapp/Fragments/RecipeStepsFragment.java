@@ -3,6 +3,10 @@ package com.example.gamal.adnp3_bakingapp.Fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.IInterface;
+import android.os.Parcel;
+import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,14 +17,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.gamal.adnp3_bakingapp.BakingVideo_Description;
+import com.example.gamal.adnp3_bakingapp.BakingVideoDescription;
 import com.example.gamal.adnp3_bakingapp.Models.Steps;
 import com.example.gamal.adnp3_bakingapp.R;
 
+import java.io.FileDescriptor;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeStepsFragment extends Fragment {
-    List<Steps> steps;
+    ArrayList<Steps> steps;
     boolean isTablet = false;
     onItemClickListener mCallBack;
 
@@ -39,7 +45,7 @@ public class RecipeStepsFragment extends Fragment {
     }
 
     public void setSteps(List<Steps> steps) {
-        this.steps = steps;
+        this.steps = new ArrayList<Steps>(steps);
     }
 
     public RecipeStepsFragment() {
@@ -48,6 +54,9 @@ public class RecipeStepsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (savedInstanceState!=null){
+            steps=savedInstanceState.getParcelableArrayList("steps");
+        }
         final View roorView = inflater.inflate(R.layout.fragement_recipe_steps, container, false);
         ListView ls = roorView.findViewById(R.id.ls_steps);
         String[] values = new String[steps.size()];
@@ -63,16 +72,19 @@ public class RecipeStepsFragment extends Fragment {
                 if (isTablet) {
                     mCallBack.onStepClicked(steps.get(i).getId());
                 } else {
-                    Intent intent = new Intent(roorView.getContext(), BakingVideo_Description.class);
-                    intent.putExtra(BakingVideo_Description.DESCRIPTION, steps.get(i).getDescription());
-                    if (steps.get(i).getVidepURL().equals(""))
-                        intent.putExtra(BakingVideo_Description.VIDEO_URL, steps.get(i).getThumbnailURL());
-                    else
-                        intent.putExtra(BakingVideo_Description.VIDEO_URL, steps.get(i).getVidepURL());
+                    Intent intent = new Intent(roorView.getContext(), BakingVideoDescription.class);
+                    intent.putExtra(BakingVideoDescription.DESCRIPTION, steps.get(i).getDescription());
+                        intent.putExtra(BakingVideoDescription.VIDEO_URL, steps.get(i).getVidepURL());
                     startActivity(intent);
                 }
             }
         });
         return roorView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("steps",steps);
     }
 }

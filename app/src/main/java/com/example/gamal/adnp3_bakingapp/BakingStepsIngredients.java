@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.example.gamal.adnp3_bakingapp.BakingAppWidgets.BakingAppWidget;
 import com.example.gamal.adnp3_bakingapp.Fragments.RecipeDescriptionFragment;
@@ -33,8 +34,8 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.util.List;
 
-public class BakingSteps_Ingredients extends AppCompatActivity implements RecipeStepsFragment.onItemClickListener {
-    private final String TAG = getClass().getName();
+public class BakingStepsIngredients extends AppCompatActivity implements RecipeStepsFragment.onItemClickListener {
+    private final String TAG = getClass().getSimpleName();
     public final static String ID = "RECIPE_ID";
     Intent intent;
     int Id;
@@ -44,30 +45,34 @@ public class BakingSteps_Ingredients extends AppCompatActivity implements Recipe
     Bundle mSavedInstanceState;
     List<Steps> steps;
     RecipeDescriptionFragment recipeDescriptionFragment;
+    long position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baking_steps__ingredients);
-        intent = getIntent();
-        exoPlayerView = findViewById(R.id.exo_player);
 
-        if (intent.getExtras() == null && savedInstanceState == null) {
+        if (savedInstanceState != null)
+            intent = savedInstanceState.getParcelable("intent");
+        else
+            intent = getIntent();
+        exoPlayerView = findViewById(R.id.exo_player);
+        if (intent.getExtras() == null) {
             Log.e(TAG, "Activity Steps has No Extra Data");
             return;
         }
 
-
-        mSavedInstanceState = savedInstanceState;
-        if (mSavedInstanceState != null)
-            Id = mSavedInstanceState.getInt("RECIPE ID", 0);
-        else
-            Id = intent.getIntExtra(ID, -1);
+        Id = intent.getIntExtra(ID, -1);
 
         BakingAppWidget.recipeId = Id;
         int widgetIDs[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), BakingAppWidget.class));
 
         BakingAppWidget.updateListItems(this, AppWidgetManager.getInstance(this), widgetIDs);
+
+        if (mSavedInstanceState != null)
+            position = mSavedInstanceState.getLong("video-position", 0);
+        else
+            position = 0;
 
         if (findViewById(R.id.phone_layout) == null) {
             isTablet = true;
@@ -84,11 +89,6 @@ public class BakingSteps_Ingredients extends AppCompatActivity implements Recipe
     }
 
     private void handleTablet() {
-        long position;
-        if (mSavedInstanceState != null)
-            position = mSavedInstanceState.getLong("video-position", 0);
-        else
-            position = 0;
 
 
         RecipeIngredientsFragment ingredientsFragment = new RecipeIngredientsFragment();
@@ -144,6 +144,11 @@ public class BakingSteps_Ingredients extends AppCompatActivity implements Recipe
 
     private void initializePlayer(String video_url, long position) {
 
+        if (video_url.equals("")) {
+            exoPlayerView.setVisibility(View.GONE);
+            findViewById(R.id.video_not_available).setVisibility(View.VISIBLE);
+            return;
+        }
         Bitmap icon = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.ic_action_google_play);
         exoPlayerView.setDefaultArtwork(icon);
@@ -179,17 +184,13 @@ public class BakingSteps_Ingredients extends AppCompatActivity implements Recipe
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelable("intent", getIntent());
         if (mExoPlayer != null)
             outState.putLong("video-position", mExoPlayer.getCurrentPosition());
         outState.putInt("RECIPE ID", Id);
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        releasePlayer();
-    }
 
     private void releasePlayer() {
 
@@ -199,5 +200,43 @@ public class BakingSteps_Ingredients extends AppCompatActivity implements Recipe
             mExoPlayer = null;
         }
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mExoPlayer != null) {
+            mExoPlayer.setPlayWhenReady(false);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mExoPlayer != null) {
+            mExoPlayer.stop();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mExoPlayer != null) {
+            mExoPlayer.setPlayWhenReady(true);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mExoPlayer != null) {
+            mExoPlayer.setPlayWhenReady(true);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        releasePlayer();
     }
 }

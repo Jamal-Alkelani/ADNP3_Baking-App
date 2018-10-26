@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.gamal.adnp3_bakingapp.Fragments.RecipeDescriptionFragment;
@@ -23,19 +25,31 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
-public class BakingVideo_Description extends AppCompatActivity {
+public class BakingVideoDescription extends AppCompatActivity {
     public final static String DESCRIPTION = "DESC";
     public final static String VIDEO_URL = "URL";
     private SimpleExoPlayerView exoPlayerView;
     private SimpleExoPlayer mExoPlayer;
-
+    private Intent intent;
+    private final String TAG=getClass().getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baking_video__description);
-        Intent intent = getIntent();
+        Log.e(TAG,"onCreate");
+
+        long position;
+        if (savedInstanceState != null) {
+            Log.e(TAG,"not null");
+            position = savedInstanceState.getLong("video-position", 0);
+            intent=savedInstanceState.getParcelable("intent");
+        }
+        else {
+            position = 0;
+            intent = getIntent();
+        }
         if (intent == null) {
-            Toast.makeText(this, "An error occured in Video_Desc Activity (Intent is null)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, com.example.gamal.adnp3_bakingapp.R.string.error_video_des_intent, Toast.LENGTH_SHORT).show();
             return;
         }
         exoPlayerView = findViewById(R.id.exo_player);
@@ -51,17 +65,18 @@ public class BakingVideo_Description extends AppCompatActivity {
                 .add(R.id.description, recipeDescriptionFragment)
                 .commit();
 
-        long position;
-        if (savedInstanceState != null)
-            position = savedInstanceState.getLong("video-position", 0);
-        else
-            position = 0;
+
         initializePlayer(video_url, position);
 
 
     }
 
     private void initializePlayer(String video_url, long position) {
+        if(video_url.equals("")){
+            exoPlayerView.setVisibility(View.GONE);
+            findViewById(R.id.video_not_available).setVisibility(View.VISIBLE);
+            return;
+        }
 
         if (mExoPlayer == null) {
 
@@ -92,24 +107,55 @@ public class BakingVideo_Description extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
+        Log.e(TAG,"Saveing Instance");
+        outState.putParcelable("intent",intent);
+        if(mExoPlayer!=null)
         outState.putLong("video-position", mExoPlayer.getCurrentPosition());
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        releasePlayer();
-    }
+
 
     private void releasePlayer() {
 
         if (mExoPlayer != null) {
+            Log.e(TAG,"mediaPlayer released");
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;
         }
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mExoPlayer!=null){
+            mExoPlayer.setPlayWhenReady(false);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mExoPlayer!=null){
+            mExoPlayer.setPlayWhenReady(false);
+            mExoPlayer.stop();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mExoPlayer!=null){
+            mExoPlayer.setPlayWhenReady(true);
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        releasePlayer();
     }
 }
