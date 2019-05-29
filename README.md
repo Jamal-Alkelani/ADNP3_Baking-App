@@ -31,3 +31,11 @@ In this project you will:
 ### Homescreen Widget
 - [x] Application has a companion homescreen widget.
 - [x] Widget displays ingredient list for desired recipe.
+
+### Screenshots (tablet)
+<img src = "images/t1.png"> <br>
+<img src = "images/t2.png" >
+### Screenshots (mobile)
+<img src = "images/1.png" width="300px" height="550px" > <img src = "images/2.png" width="300px" height="550px" >
+<img src = "images/3.png" width="300px" height="550px" > <img src = "images/4.png" width="300px" height="550px" >
+ <img src = "images/5.png">
